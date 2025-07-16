@@ -1,20 +1,10 @@
-// src/components/DevopsPipelineForm.tsx
-
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-// Update the import path and component names to match your UI library
-// Example for shadcn/ui (commonly used):
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
+import { Select } from "@/components/ui/select";
 
 const techOptions = ["Amplify (FE)", "Heroku (FE & BE)", "Netlify (FE)"];
 const ciTools = ["GitHub Actions", "GitLab CI", "Bitbucket Pipelines", "Jenkins"];
@@ -24,6 +14,11 @@ const secretScanTools = ["TruffleHog", "GitLeaks", "Talisman", "Vault"];
 const vulnScanTools = ["DependencyTrack", "Snyk", "OWASP Dependency-Check"];
 const dockerScanTools = ["Trivy", "Grype", "Clair", "Anchore"];
 const preChecks = ["SAST", "Secrets Scan", "SBOM", "SCA", "Container Scan", "Runtime Security"];
+const productionStages = [
+  { value: "not-ready", label: "Not Yet Deployed" },
+  { value: "ready", label: "Ready for Production" },
+  { value: "live", label: "Already in Production" }
+];
 
 const DevopsPipelineForm: React.FC = () => {
   const [form, setForm] = useState({
@@ -62,7 +57,6 @@ const DevopsPipelineForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form submitted:", form);
-    // You can plug in logic here to analyze form and show recommendations
   };
 
   return (
@@ -71,25 +65,19 @@ const DevopsPipelineForm: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <Label>
             Technology
-            <Select value={form.tech} onValueChange={(val: string) => handleChange("tech", val)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select technology" />
-              </SelectTrigger>
-              <SelectContent>
-                {techOptions.map((t) => (
-                  <SelectItem key={t} value={t}>
-                    {t}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Select
+              value={form.tech}
+              onChange={(val) => handleChange("tech", val)}
+              options={techOptions.map((t) => ({ value: t, label: t }))}
+              placeholder="Select technology"
+            />
           </Label>
 
           <Label>
             Version
             <Input
               value={form.version}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange("version", e.target.value)}
+              onChange={(e) => handleChange("version", e.target.value)}
               placeholder="e.g., 18.x"
             />
           </Label>
@@ -98,7 +86,7 @@ const DevopsPipelineForm: React.FC = () => {
             Install Command
             <Input
               value={form.installCmd}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange("installCmd", e.target.value)}
+              onChange={(e) => handleChange("installCmd", e.target.value)}
               placeholder="e.g., npm install"
             />
           </Label>
@@ -107,113 +95,77 @@ const DevopsPipelineForm: React.FC = () => {
             Build Command
             <Input
               value={form.buildCmd}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange("buildCmd", e.target.value)}
+              onChange={(e) => handleChange("buildCmd", e.target.value)}
               placeholder="e.g., npm run build"
             />
           </Label>
 
           <Label>
             SAST Tool
-            <Select value={form.sast} onValueChange={(val: string) => handleChange("sast", val)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select SAST tool" />
-              </SelectTrigger>
-              <SelectContent>
-                {sastTools.map((t) => (
-                  <SelectItem key={t} value={t}>
-                    {t}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Select
+              value={form.sast}
+              onChange={(val) => handleChange("sast", val)}
+              options={sastTools.map((t) => ({ value: t, label: t }))}
+              placeholder="Select SAST tool"
+            />
           </Label>
 
           <Label>
             Secret Scanning Tool
-            <Select value={form.secrets} onValueChange={(val: string) => handleChange("secrets", val)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select secret scan tool" />
-              </SelectTrigger>
-              <SelectContent>
-                {secretScanTools.map((t) => (
-                  <SelectItem key={t} value={t}>
-                    {t}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Select
+              value={form.secrets}
+              onChange={(val) => handleChange("secrets", val)}
+              options={secretScanTools.map((t) => ({ value: t, label: t }))}
+              placeholder="Select secret scan tool"
+            />
           </Label>
 
           <Label>
             Vulnerability Scan Tool
-            <Select value={form.vuln} onValueChange={(val: string) => handleChange("vuln", val)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select vulnerability scan tool" />
-              </SelectTrigger>
-              <SelectContent>
-                {vulnScanTools.map((t) => (
-                  <SelectItem key={t} value={t}>
-                    {t}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Select
+              value={form.vuln}
+              onChange={(val) => handleChange("vuln", val)}
+              options={vulnScanTools.map((t) => ({ value: t, label: t }))}
+              placeholder="Select vulnerability scan tool"
+            />
           </Label>
 
           <Label className="flex items-center gap-2">
             <Checkbox
               checked={form.sca}
-              onCheckedChange={(val: boolean) => handleChange("sca", val)}
+              onCheckedChange={(val) => handleChange("sca", val)}
             />
             SCA (Software Composition Analysis)
           </Label>
 
           <Label>
             Docker Image Scan Tool
-            <Select value={form.dockerScan} onValueChange={(val: string) => handleChange("dockerScan", val)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select docker scan tool" />
-              </SelectTrigger>
-              <SelectContent>
-                {dockerScanTools.map((t) => (
-                  <SelectItem key={t} value={t}>
-                    {t}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Select
+              value={form.dockerScan}
+              onChange={(val) => handleChange("dockerScan", val)}
+              options={dockerScanTools.map((t) => ({ value: t, label: t }))}
+              placeholder="Select docker scan tool"
+            />
           </Label>
 
           <Label>
             CI Tool
-            <Select value={form.ci} onValueChange={(val: string) => handleChange("ci", val)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select CI tool" />
-              </SelectTrigger>
-              <SelectContent>
-                {ciTools.map((t) => (
-                  <SelectItem key={t} value={t}>
-                    {t}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Select
+              value={form.ci}
+              onChange={(val) => handleChange("ci", val)}
+              options={ciTools.map((t) => ({ value: t, label: t }))}
+              placeholder="Select CI tool"
+            />
           </Label>
 
           <Label>
             CD Tool
-            <Select value={form.cd} onValueChange={(val: string) => handleChange("cd", val)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select CD tool" />
-              </SelectTrigger>
-              <SelectContent>
-                {cdTools.map((t) => (
-                  <SelectItem key={t} value={t}>
-                    {t}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Select
+              value={form.cd}
+              onChange={(val) => handleChange("cd", val)}
+              options={cdTools.map((t) => ({ value: t, label: t }))}
+              placeholder="Select CD tool"
+            />
           </Label>
 
           <div>
@@ -235,24 +187,17 @@ const DevopsPipelineForm: React.FC = () => {
             Production Stage
             <Select
               value={form.productionStage}
-              onValueChange={(val: string) => handleChange("productionStage", val)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select production stage" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="not-ready">Not Yet Deployed</SelectItem>
-                <SelectItem value="ready">Ready for Production</SelectItem>
-                <SelectItem value="live">Already in Production</SelectItem>
-              </SelectContent>
-            </Select>
+              onChange={(val) => handleChange("productionStage", val)}
+              options={productionStages}
+              placeholder="Select production stage"
+            />
           </Label>
 
           <Label>
             Branching Strategy
             <Input
               value={form.branching}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange("branching", e.target.value)}
+              onChange={(e) => handleChange("branching", e.target.value)}
               placeholder="e.g., trunk-based, Git flow, etc."
             />
           </Label>
