@@ -1,25 +1,28 @@
-import { useState } from "react";
+import { useState } from "react"
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
+import { Select } from "@/components/ui/select"
+import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+
 
 export default function PipelineForm() {
-  const [tech, setTech] = useState("");
-  const [sast, setSast] = useState<string[]>([]);
-  const [secretScan, setSecretScan] = useState<string[]>([]);
-  const [vulScan, setVulScan] = useState<string[]>([]);
-  const [sca, setSca] = useState<string[]>([]);
-  const [ciTool, setCiTool] = useState("");
-  const [cdTool, setCdTool] = useState("");
-  const [showDocker, setShowDocker] = useState(false);
+  const [tech, setTech] = useState("")
+  const [sast, setSast] = useState<string[]>([])
+  const [secretScan, setSecretScan] = useState<string[]>([])
+  const [vulScan, setVulScan] = useState<string[]>([])
+  const [sca, setSca] = useState<string[]>([])
+  const [ciTool, setCiTool] = useState("")
+  const [cdTool, setCdTool] = useState("")
+  const [showDocker, setShowDocker] = useState(false)
 
   return (
     <Card className="w-full max-w-4xl mx-auto mt-10 p-6 shadow-xl rounded-2xl">
@@ -32,22 +35,21 @@ export default function PipelineForm() {
       <CardContent className="grid gap-6">
         {/* Tech Stack */}
         <div>
-          <Label>Select Technology Stack</Label>
-          <Select
-            options={[
-              { value: "amplify", label: "Amplify (FE)" },
-              { value: "heroku", label: "Heroku (FE + BE)" },
-              { value: "netlify", label: "Netlify (FE)" },
-            ]}
-            value={tech}
-            onChange={setTech}
-            placeholder="Choose..."
-          />
-        </div>
+  <Label>Select Technology Stack</Label>
+  <Select
+    value={tech}
+    onChange={setTech}
+    options={[
+      { value: "amplify", label: "Amplify (FE)" },
+      { value: "heroku", label: "Heroku (FE + BE)" },
+      { value: "netlify", label: "Netlify (FE)" },
+    ]}
+    placeholder="Choose..."
+  />
+</div>
 
-        {/* Technology Stack Details */}
 
-        {/* Basic Info */}
+        {/* Version / Commands */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <Label>Version</Label>
@@ -161,7 +163,7 @@ export default function PipelineForm() {
           <Input placeholder="e.g. ESLint, Prettier, Unit Tests..." />
         </div>
 
-        {/* Docker */}
+        {/* Dockerfile Checkbox */}
         <div className="flex items-center space-x-2">
           <Checkbox
             checked={showDocker}
@@ -174,37 +176,39 @@ export default function PipelineForm() {
 
         {/* CI/CD */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <Label>CI Tool</Label>
-            <Select
-              options={[
-                { value: "github-actions", label: "GitHub Actions" },
-                { value: "gitlab-ci", label: "GitLab CI" },
-                { value: "bitbucket", label: "Bitbucket" },
-                { value: "jenkins", label: "Jenkins" },
-              ]}
-              value={ciTool}
-              onChange={setCiTool}
-              placeholder="Select CI"
-            />
-          </div>
-          <div>
-            <Label>CD Tool</Label>
-            <Select
-              options={[
-                { value: "github-actions", label: "GitHub Actions" },
-                { value: "gitlab-ci", label: "GitLab CI" },
-                { value: "bitbucket", label: "Bitbucket" },
-                { value: "jenkins", label: "Jenkins" },
-                { value: "argocd", label: "ArgoCD" },
-              ]}
-              value={cdTool}
-              onChange={setCdTool}
-              placeholder="Select CD"
-            />
-          </div>
-        </div>
+  <div>
+    <Label>CI Tool</Label>
+    <Select
+      value={ciTool}
+      onChange={setCiTool}
+      options={[
+        { value: "github-actions", label: "GitHub Actions" },
+        { value: "gitlab-ci", label: "GitLab CI" },
+        { value: "bitbucket", label: "Bitbucket" },
+        { value: "jenkins", label: "Jenkins" },
+      ]}
+      placeholder="Select CI Tool"
+    />
+  </div>
+</div>
 
+ 
+          <div>
+  <Label>CD Tool</Label>
+  <Select
+    value={cdTool}
+    onChange={setCdTool}
+    options={[
+      { value: "github-actions", label: "GitHub Actions" },
+      { value: "gitlab-ci", label: "GitLab CI" },
+      { value: "bitbucket", label: "Bitbucket" },
+      { value: "jenkins", label: "Jenkins" },
+      { value: "argocd", label: "ArgoCD" },
+    ]}
+    placeholder="Select CD Tool"
+  />
+</div>
+       
         {/* Branching Strategy */}
         <div>
           <Label>Branching Strategy / Environment Stage</Label>
@@ -212,5 +216,5 @@ export default function PipelineForm() {
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }
