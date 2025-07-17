@@ -15,7 +15,7 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-gray-50 p-6 font-sans">
       <div className="max-w-5xl mx-auto space-y-10">
         <h1 className="text-4xl font-bold mb-6 text-center text-indigo-700">
-          🧠 AI-Powered Pipeline Validator
+          {/* 🧠 AI-Powered Pipeline Validator */}
         </h1>
 
         {/* 🔹 Intelligent DevOps Form */}
